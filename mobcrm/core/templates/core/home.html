@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Welcome to Mobilize CRM{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="home-container">
+        <h1 class="welcome-title">Welcome to Mobilize CRM</h1>
+        
+        <div class="intro-text highlight-box">
+            <p>Mobilize CRM is a powerful tool designed exclusively for our company to manage and nurture our network of contacts, churches, and partners.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="features-list">
+            <h2>With Mobilize CRM, you can:</h2>
+            <ul>
+                <li>Efficiently manage contacts, including individuals and churches</li>
+                <li>Track communication history and maintain detailed logs</li>
+                <li>Manage tasks and stay on top of your workflow</li>
+                <li>Monitor and advance prospects through your pipeline</li>
+                <li>Generate insightful reports to guide your outreach strategies</li>
+            </ul>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="access-info">
+            <h2>How to Get Access</h2>
+            <p>Mobilize CRM is an internal tool for authorized company personnel only. If you're a member of our team and need access, please contact your supervisor or the IT department.</p>
+            <p>For more information about Mobilize CRM, please email <a href="mailto:crm-support@mobilizecrm.com">crm-support@mobilizecrm.com</a>.</p>
+        </div>
+
+        {% if not user.is_authenticated %}
+        <div class="login-prompt">
+            <p>Already have an account? <a href="#" class="btn-primary">Log In</a></p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

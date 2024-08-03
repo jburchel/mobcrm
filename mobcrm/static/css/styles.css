@@ -1,0 +1,353 @@
+.footer {
+    background-color: #f8f9fa;
+    padding: 2rem 0;
+    margin-top: 2rem;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section {
+    flex: 1;
+    margin: 1rem;
+    min-width: 200px;
+}
+
+.footer-title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.footer-links {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+    color: #333;
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ddd;
+}
+
+.home-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+.welcome-title {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+.intro-text, .features-list, .access-info {
+    margin-bottom: 2rem;
+}
+.features-list ul {
+    list-style-type: none;
+    padding-left: 1rem;
+}
+.features-list li:before {
+    content: "• ";
+    color: #007bff;  /* Blue color from your samples */
+}
+.login-prompt {
+    background-color: #f8f9fa;  /* Light gray from your samples */
+    padding: 1rem;
+    border-radius: 5px;
+}
+a {
+    color: #007bff;  /* Blue color for links */
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1, h2 {
+    color: #183963;
+}
+
+.home-container {
+    background-color: #f8f9fa;
+    padding: 30px;
+    border-radius: 5px;
+}
+
+.welcome-title {
+    color: #183963;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.intro-text, .features-list, .access-info, .login-prompt {
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+li {
+    margin-bottom: 10px;
+    padding-left: 20px;
+    position: relative;
+}
+
+li:before {
+    content: "•";
+    color: #007bff;
+    position: absolute;
+    left: 0;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.login-prompt {
+    background-color: #e9ecef;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.navbar {
+    background-color: #183963;
+    padding: 10px 0;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.navbar-menu {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.navbar-item {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    transition: background-color 0.3s;
+}
+
+.navbar-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.footer {
+    background-color: #f8f9fa;
+    padding: 20px 0;
+    margin-top: 20px;
+}
+
+.footer .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-content {
+    text-align: center;
+}
+
+.footer-content p {
+    margin: 0;
+    color: #6c757d;
+}
+
+.footer {
+    background-color: #e9ecef;  /* A slightly darker shade than before */
+    padding: 20px 0;
+    margin-top: 20px;
+}
+
+.footer .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-content {
+    text-align: center;
+}
+
+.footer-content p {
+    margin: 0;
+    color: #183963;  /* Updated to match navbar background color */
+    font-weight: bold;  /* Optional: makes the text a bit more prominent */
+}
+
+.footer-content a {
+    color: #183963;
+    text-decoration: none;
+}
+
+.footer-content a:hover {
+    text-decoration: underline;
+}
+
+/* Button styling */
+.btn-primary {
+    background-color: #152237;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #1c2d4a;
+}
+
+/* Highlight box */
+.highlight-box {
+    border-left: 5px solid #152237;
+    background-color: #f8f9fa;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+/* Section divider */
+.section-divider {
+    border: 0;
+    height: 2px;
+    background-color: #152237;
+    margin: 30px 0;
+}
+
+/* List item markers */
+.features-list ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.features-list li {
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 10px;
+}
+
+.features-list li::before {
+    content: "•";
+    color: #152237;
+    font-size: 1.5em;
+    position: absolute;
+    left: 0;
+    top: -3px;
+}
+
+/* Button styling */
+.btn-primary {
+    background-color: #39A949;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #2d8a3a;  /* A slightly darker shade for hover effect */
+}
+
+/* Highlight box */
+.highlight-box {
+    border-left: 5px solid #39A949;
+    background-color: #f8f9fa;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+/* Section divider */
+.section-divider {
+    border: 0;
+    height: 2px;
+    background-color: #39A949;
+    margin: 30px 0;
+}
+
+/* List item markers */
+.features-list ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.features-list li {
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 10px;
+}
+
+.features-list li::before {
+    content: "•";
+    color: #39A949;
+    font-size: 1.5em;
+    position: absolute;
+    left: 0;
+    top: -3px;
+}
+
+/* Update link color to match */
+a {
+    color: #39A949;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
