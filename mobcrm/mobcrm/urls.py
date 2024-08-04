@@ -7,6 +7,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),    
     path('', include('core.urls')),  # This line includes your core app's URLs
+    path('user/', include('userprofile.urls', namespace='userprofile')),
+    path('contacts/', include('contacts.urls', namespace='contacts')),
 ]
 
 if settings.DEBUG:

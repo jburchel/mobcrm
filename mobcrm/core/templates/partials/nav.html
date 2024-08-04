@@ -1,12 +1,15 @@
 <nav class="navbar">
-    <div class="container">
-        <a href="/" class="navbar-brand">Mobilize CRM</a>
-        <div class="navbar-menu">
-            <a href="#" class="navbar-item">Task-Tracker</a>
-            <a href="#" class="navbar-item">Com-Log</a>
-            <a href="#" class="navbar-item">Churches</a>
-            <a href="#" class="navbar-item">Individuals</a>
-            <a href="#" class="navbar-item">All Contacts</a>
-        </div>
+    <a href="{% url 'home' %}" class="navbar-brand">Mobilize CRM</a>
+    <div class="navbar-menu">
+        <a href="{% url 'contacts:contact_list' %}" class="navbar-item">All Contacts</a>
+        <a href="#" class="navbar-item">Churches</a>
+        <a href="#" class="navbar-item">Com-Log</a>
+        <a href="#" class="navbar-item">Task-Tracker</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'userprofile:my_account' %}" class="navbar-item">My Account</a>
+            <a href="{% url 'userprofile:logout' %}" class="navbar-item">Logout</a>
+        {% else %}
+            <a href="{% url 'userprofile:login' %}" class="navbar-item">Login</a>
+        {% endif %}
     </div>
 </nav>

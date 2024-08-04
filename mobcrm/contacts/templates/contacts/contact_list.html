@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container contacts-container">
+    <h1 class="contacts-title">All Contacts</h1>
+
+    <a href="#" class="btn btn-primary">Add New Contact</a>
+
+    <div class="search-bar">
+        <input type="text" placeholder="Search">
+    </div>
+
+    <table class="contacts-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Type</th>                
+                <th>Last Contact</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contact in contacts %}
+            <tr>
+                <td>{{ contact.first_name }} {{ contact.last_name }}</td>
+                <td>{{ contact.phone }}</td>
+                <td>{{ contact.email }}</td>
+                <td>{{ contact.get_type_display }}</td>                
+                <td>{{ contact.last_contact|date:"Y-m-d" }}</td>
+                <td>
+                    <a href="{% url 'contacts:contact_detail' contact.pk %}" class="action-link">View</a> |
+                    <a href="{% url 'contacts:contact_update' contact.pk %}" class="action-link">Edit</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <a href="#" class="disabled">Previous</a>
+        <a href="#" class="active">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">Next</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h1>Sign Up for Mobilize CRM</h1>
+
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        {% for field in form %}
+            {% for error in field.errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="POST" class="signup-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.username.id_for_label }}">Full Name</label>
+            {{ form.username }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.email.id_for_label }}">Email Address</label>
+            {{ form.email }}
+        </div>
+        <div class="form-group">
+            <label for="role">Your Role</label>
+            <select id="role" name="role" required>
+                <option value="">Select your role</option>
+                <option value="Base Mobilizer">Base Mobilizer</option>
+                <option value="Regional Mobilizer">Regional Mobilizer</option>
+                <option value="Global Team">Global Team</option>
+                <option value="Mobilization Director">Mobilization Director</option>
+                <option value="Office Executive Director">Office Executive Director</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="{{ form.password1.id_for_label }}">Password</label>
+            {{ form.password1 }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
+            {{ form.password2 }}
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Create Account</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
