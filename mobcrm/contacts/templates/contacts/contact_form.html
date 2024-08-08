@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <h2>{% if form.instance.pk %}Edit{% else %}Add New{% endif %} Contact</h2>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}       
+        <div class="form-group">
+            <label for="id_type">Contact Type</label>
+            {{ form.type|as_crispy_field }}
+        </div>
+        
+        </div id= "general_fields">
+            {{ form|crispy }}
+        </div>
+        
+        <div id="church_fields" style="display: none;">
+            {{ church_form|crispy }}
+        </div>
+
+        <div id="prospect_fields" style="display: none;">
+            {{ prospect_form|crispy }}
+        </div>
+
+        <div id="non_prospect_fields" style="display: none;">
+            {{ non_prospect_form|crispy }}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">
+            {% if form.instance.pk %}Update{% else %}Create{% endif %} Contact
+        </button>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/contact_form.js' %}"></script>
+{% endblock %}

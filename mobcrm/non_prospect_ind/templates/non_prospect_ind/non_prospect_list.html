@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Non-Prospect Individuals</h1>
+    
+    <a href="{% url 'contacts:non_prospect_ind_create' %}" class="btn btn-primary mb-3">Add New Non-Prospect Individual</a>
+
+    {% if non_prospects %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Assigned To</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for non_prospect in non_prospects %}
+                    <tr>
+                        <td>{{ non_prospect.first_name }} {{ non_prospect.last_name }}</td>
+                        <td>{{ non_prospect.email }}</td>
+                        <td>{{ non_prospect.phone }}</td>
+                        <td>{{ non_prospect.assigned_to }}</td>
+                        <td>
+                            <a href="{% url 'contacts:non_prospect_ind_detail' non_prospect.id %}" class="btn btn-sm btn-info">View</a>
+                            <a href="{% url 'contacts:non_prospect_ind_update' non_prospect.id %}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="{% url 'contacts:non_prospect_ind_delete' non_prospect.id %}" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No non-prospect individuals found.</p>
+    {% endif %}
+</div>
+{% endblock %}

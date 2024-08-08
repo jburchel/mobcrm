@@ -1,0 +1,60 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/church_list.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Prospects</h1>
+
+    <div class="search-bar">
+        <input type="text" placeholder="Search" class="search-input">
+        <button class="btn btn-success btn-rounded">Search</button>
+    </div>
+    
+    <a href="{% url 'contacts:prospect_create' %}" class="btn btn-primary mb-3">Add New Prospect</a>
+
+    {% if prospects %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Pipeline</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for church in churches %}
+                    <tr>
+                        <td>{{ prospect.first_name }} {{ prospect.last_name }}</td>
+                        <td>{{ prospect.city }}, {{ prospect.state }}</td>
+                        <td>{{ prospect.phone }}</td>
+                        <td>{{ prospect.email }}</td>
+                        <td>{{ prospect.individual_pipeline }}</td>
+                        <td>
+                            <a href="{% url 'contacts:prospect_detail' prospect.pk %}" class="btn btn-sm btn-info">View</a>
+                            <a href="{% url 'contacts:prospect_update' prospect.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="{% url 'contacts:prospect_delete' prospect.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No prospects found.</p>
+    {% endif %}
+
+    <div class="pagination">
+        <a href="#" class="disabled">Previous</a>
+        <a href="#" class="active">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">Next</a>
+    </div>
+</div>
+{% endblock %}

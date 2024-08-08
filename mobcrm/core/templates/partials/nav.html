@@ -1,15 +1,21 @@
 <nav class="navbar">
-    <a href="{% url 'home' %}" class="navbar-brand">Mobilize CRM</a>
-    <div class="navbar-menu">
-        <a href="{% url 'contacts:contact_list' %}" class="navbar-item">All Contacts</a>
-        <a href="#" class="navbar-item">Churches</a>
-        <a href="#" class="navbar-item">Com-Log</a>
-        <a href="#" class="navbar-item">Task-Tracker</a>
-        {% if user.is_authenticated %}
-        <a href="{% url 'userprofile:my_account' %}" class="navbar-item">My Account</a>
-            <a href="{% url 'userprofile:logout' %}" class="navbar-item">Logout</a>
-        {% else %}
-            <a href="{% url 'userprofile:login' %}" class="navbar-item">Login</a>
-        {% endif %}
+        <a href="{% url 'home' %}" class="navbar-brand">Mobilize CRM</a>
+        <div class="navbar-seperator"></div>
+            <div class="navbar-menu">
+                <a href="{% url 'contacts:contact_list' %}" class="navbar-item">All Contacts</a> <span class="nav-separator">|</span>
+                <a href=" {% url 'contacts:church_list' %}" class="navbar-item">Churches</a> <span class="nav-separator">|</span>
+                <a href=" {% url 'contacts:prospect_list' %}" class="navbar-item">Prospects</a> <span class="nav-separator">|</span>
+                <a href="#" class="navbar-item">Com-Log</a> <span class="nav-separator">|</span>
+                <a href="#" class="navbar-item">Task-Tracker</a>
+                {% if user.is_authenticated %}
+                    <span class="nav-separator">|</span>
+                    <a href="#" class="navbar-item">My Account</a> <span class="nav-separator">|</span>
+                    <a href="{% url 'userprofile:logout' %}" class="navbar-item">Logout</a>
+                {% else %}
+                    <span class="nav-separator">|</span>
+                    <a href="{% url 'userprofile:login' %}" class="navbar-item">Login</a>
+                {% endif %}
+            </div>
+        </div>
     </div>
 </nav>

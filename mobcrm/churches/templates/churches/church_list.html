@@ -1,0 +1,58 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/church_list.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Churches</h1>
+
+    <div class="search-bar">
+        <input type="text" placeholder="Search" class="search-input">
+        <button class="btn btn-success btn-rounded">Search</button>
+    </div>
+    
+    <a href="{% url 'contacts:church_create' contact.pk %}" class="btn btn-primary mb-3">Add New Church</a>
+
+    {% if churches %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Senior Pastor</th>
+                    <th>Congregation Size</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for church in churches %}
+                    <tr>
+                        <td>{{ church.name }}</td>
+                        <td>{{ church.city }}, {{ church.state }}</td>
+                        <td>{{ church.senior_pastor }}</td>
+                        <td>{{ church.congregation_size }}</td>
+                        <td>
+                            <a href="{% url 'contacts:church_detail' contact.pk %}" class="btn btn-sm btn-info">View</a>
+                            <a href="{% url 'contacts:church_update' contact.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="{% url 'contacts:church_delete' contact.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No churches found.</p>
+    {% endif %}
+
+    <div class="pagination">
+        <a href="#" class="disabled">Previous</a>
+        <a href="#" class="active">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">Next</a>
+    </div>
+</div>
+{% endblock %}

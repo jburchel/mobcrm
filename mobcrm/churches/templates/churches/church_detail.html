@@ -1,0 +1,105 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/contact_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="church-header">
+        {% if church.image %}
+            <img src="{{ church.image.url }}" alt="{{ church.name }}" class="church-image" width="300" height="200">
+        {% else %}
+            <img src="{% static 'images/default_church.jpg' %}" alt="{{ church.name }}" class="church-image" width="300" height="200">
+        {% endif %}
+
+        <div class="church-title">
+            <h1 class="church-name">{{ church.name }}</h1>
+            <div class="church-denomination">{{ church.denomination }}</div>            
+        </div>
+    </div>
+
+    <div class="church-details">
+        <div class="detail-section">
+            <h2>Contact Information</h2>
+            <div class="detail-item"><span class="detail-label">Email:</span> {{ church.email }}</div>
+            <div class="detail-item"><span class="detail-label">Phone:</span> {{ church.phone }}</div>
+            <div class="detail-item"><span class="detail-label">Website:</span> <a href="{{ church.website }}" target="_blank">{{ church.website }}</a></div>
+            <div class="detail-item"><span class="detail-label">Address:</span> {{ church.street_address }}, {{ church.city }}, {{ church.state }} {{ church.zipcode }}</div>
+        </div>
+
+        <div class="detail-section">
+            <h2>Church Details</h2>
+            <div class="detail-item"><span class="detail-label">Congregation Size:</span> {{ church.congregation_size }}</div>
+            <div class="detail-item"><span class="detail-label">Year Founded:</span> {{ church.year_founded }}</div>
+            <div class="detail-item"><span class="detail-label">Senior Pastor:</span> {{ church.senior_pastor_first_name }}  {{church.senior_pastor_last_name }}</div>
+            <div class="detail-item"><span class="detail-label">Missions Pastor:</span> {{ church.missions_pastor_first_name }}  {{church.missions_pastor_last_name }}</div>
+
+        </div>
+
+        <div class="engagement-history">
+            <h2>Most Recent Connection</h2>
+            <div class="detail-item"><span class="detail-label">Last Contact:</span> Last Contact Date Here</div>
+            <div class="detail-item"><span class="detail-label">Contact Method:</span> Last Contact Method Here</div>
+            <div class="detail-item"><span class="detail-label">Primary Contact:</span> {{ church.primary_contact_first_name }} {{ church.primary_contact_last_name }}</div>
+            <div class="detail-item"><span class="detail-label">Notes:</span> Last Contact Notes Here</div>
+            {% comment %} {% for interaction in recent_interactions %}
+                <div class="detail-item">
+                    <span class="detail-label">{{ interaction.date|date:"F d, Y" }}:</span> 
+                    {{ interaction.notes }}
+                </div>
+            {% endfor %} {% endcomment %}
+        </div>       
+    </div>
+    <div class="bottom-section">
+        <div class="recent-interactions">
+            <h2>Recent Interactions</h2>
+            <table class="interaction-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Summary</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                {% comment %} <tbody>
+                    {% for interaction in recent_interactions %}
+                    <tr>
+                        <td>{{ interaction.date|date:"F d, Y" }}</td>
+                        <td>{{ interaction.get_interaction_type_display }}</td>
+                        <td>{{ interaction.summary }}</td>
+                        <td>
+                            <a href="{% url 'view_interaction' interaction.id %}" class="btn btn-sm btn-primary">View</a>
+                            <a href="{% url 'edit_interaction' interaction.id %}" class="btn btn-sm btn-secondary">Edit</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No recent interactions recorded.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody> {% endcomment %}
+            </table>
+        </div>
+    </div>
+        
+        {% comment %} <div class="upcoming-tasks">
+            <h2>Upcoming Tasks</h2>
+            {% for task in upcoming_tasks %}
+                <div class="detail-item">
+                    <span class="detail-label">{{ task.due_date|date:"F d, Y" }}:</span> 
+                    {{ task.description }}
+                </div>
+            {% endfor %}
+        </div> {% endcomment %}
+    </div>
+    <div class="action-buttons">
+        <a href="{% url 'contacts:church_update' church.contact_ptr_id %}" class="btn btn-primary">Edit Church</a>
+        <a href="{#" class="btn btn-secondary">Log New Interaction</a>
+        <a href="#" class="btn btn-secondary">Schedule Task</a>
+        <a href="#" class="btn btn-secondary">View Communication History</a>
+        <a href="{% url 'contacts:church_delete' church.contact_ptr_id %}">Delete</a>
+    </div>
+</div>
+{% endblock %}

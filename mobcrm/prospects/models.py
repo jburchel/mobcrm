@@ -1,3 +1,2 @@
-from django.db import models
+from contacts.models import Prospect
 
-# Create your models here.

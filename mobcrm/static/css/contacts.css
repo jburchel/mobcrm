@@ -1,0 +1,137 @@
+/* Button styles */
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    border: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-success {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #45a049;
+}
+
+.btn-sm {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+    border-radius: 8px !important;
+}
+
+.action-btn {
+    margin-right: 5px;
+}
+
+/* Search bar styles */
+.search-bar {
+    display: flex;
+    margin: 20px 0;
+}
+
+.search-bar input {
+    flex-grow: 1;
+    margin-right: 10px;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    
+}
+
+/* Table styles */
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 20px;
+}
+
+.table th, .table td {
+    text-align: left;
+    padding: 12px 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.table th {
+    background-color: #f2f2f2;
+}
+
+.actions-column {
+    white-space: nowrap;
+}
+
+/* Action button styles */
+.action-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 10px;
+    margin-right: 5px;
+}
+
+.btn-sm.action-btn {
+    display: inline-block;
+    padding: 4px 8px;
+    font-size: 12px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border-radius: 10px;
+}
+
+.actions-column .btn-sm.action-btn:first-child {
+    margin-left: 0;
+}
+
+/* Pagination styles */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination a {
+    color: white;
+    background-color: #4CAF50;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 10px;
+    margin: 0 4px;
+    transition: background-color 0.3s ease;
+}
+
+.pagination a:hover {
+    background-color: #45a049;
+}
+
+.pagination a.active {
+    background-color: #45a049;
+}
+
+.pagination a.disabled {
+    background-color: #ddd;
+    color: #666;
+    pointer-events: none;
+}
+
+/* Search bar styles */
+.search-bar {
+    display: flex;
+    margin: 20px 0;
+}
+
+.search-input {
+    flex-grow: 1;
+    margin-right: 10px;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 0; /* This removes the rounded corners */
+}

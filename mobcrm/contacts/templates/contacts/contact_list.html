@@ -1,43 +1,64 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block content %}
-<div class="container contacts-container">
-    <h1 class="contacts-title">All Contacts</h1>
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/contacts.css' %}">
+{% endblock %}
 
-    <a href="#" class="btn btn-primary">Add New Contact</a>
+{% block content %}
+<div class="container">
+    <h1>All Contacts</h1>
 
     <div class="search-bar">
-        <input type="text" placeholder="Search">
+        <input type="text" placeholder="Search" class="search-input">
+        <button class="btn btn-success btn-rounded">Search</button>
     </div>
 
-    <table class="contacts-table">
+    <a href="{% url 'contacts:contact_create' %}" class="btn btn-success btn-rounded">Add New Contact</a>
+
+    {% if contacts %}
+    <table class="table">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Type</th>                
-                <th>Last Contact</th>
-                <th>Actions</th>
+                <th class="col-name">Name</th>
+                <th class="col-type">Type</th>
+                <th class="col-email">Email</th>
+                <th class="col-phone">Phone</th>
+                <th class="col-last-contact">Last Contact</th>
+                <th class="col-actions">Actions</th>
             </tr>
         </thead>
         <tbody>
-            {% for contact in contacts %}
             <tr>
                 <td>{{ contact.first_name }} {{ contact.last_name }}</td>
-                <td>{{ contact.phone }}</td>
+                <td>{{ contact.type }}</td>
                 <td>{{ contact.email }}</td>
-                <td>{{ contact.get_type_display }}</td>                
-                <td>{{ contact.last_contact|date:"Y-m-d" }}</td>
-                <td>
-                    <a href="{% url 'contacts:contact_detail' contact.pk %}" class="action-link">View</a> |
-                    <a href="{% url 'contacts:contact_update' contact.pk %}" class="action-link">Edit</a>
-                </td>
+                <td>{{ contacts.phone }}</td>
+                <td>{{ contact.date_last_updated }}</td>                
+                <td class="actions-column">
+                    <td class="actions-column">
+                        {% if contact_type == 'CHURCH' %}
+                            <a href="{% url 'contacts:church_detail' contact.pk %}" class="btn btn-info btn-sm">View</a> |
+                            <a href="{% url 'contacts:church_update' contact.pk %}" class="btn btn-info btn-sm">Edit</a> |
+                        {% elif contact_type == 'PROSPECT' %}
+                            <a href="{% url 'contacts:prospect_detail' contact.pk %}" class="btn btn-info btn-sm">View</a> |
+                            <a href="{% url 'contacts:prospect_update' contact.pk %}" class="btn btn-info btn-sm">Edit</a> |
+                        {% elif contact_type == 'NON_PROSPECT' %}
+                            <a href="{% url 'contacts:non_prospect_detail' contact.pk %}" class="btn btn-info btn-sm">View</a> |
+                            <a href="{% url 'contacts:non_prospect_update' contact.pk %}" class="btn btn-info btn-sm">Edit</a> |
+                        {% endif %}
+                        <form method="post" action="#" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this contact?')">Delete</button>
+                        </form>
+                    </td>
             </tr>
-            {% endfor %}
+            <!-- More rows would be added here dynamically -->
         </tbody>
     </table>
+    {% else %}
+        <p>No contacts found.</p>
+    {% endif %}
 
     <div class="pagination">
         <a href="#" class="disabled">Previous</a>

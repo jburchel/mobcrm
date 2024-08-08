@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/contact_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="contact-details">
+        <div>
+            {% if non_prospect_ind.contact_ptr.image %}
+                <img src="{{ non_prospect_ind.image.url }}" alt="{{ non_prospect_ind.contact_ptr.first_name }} {{ non_prospect_ind.contact_ptr.last_name }}" class="contact-image" width="300" height="300">
+            {% else %}
+                <img src="{% static 'images/default_profile.jpg' %}" alt="{{ non_prospect_ind.contact_ptr.first_name }} {{ non_prospect_ind.contact_ptr.last_name }}" class="contact-image" width="300" height="300">
+            {% endif %}
+        </div>
+
+        <div class="contact-info">
+            <h2>{{ non_prospect_ind.contact_ptr.first_name }} {{ non_prospect_ind.contact_ptr.last_name }}</h2>
+            
+            <p><strong>Type:</strong> Individual</p>
+            <p><strong>Location:</strong> {{ non_prospect_ind.contact_ptr.city }}, {{ non_prospect_ind.contact_ptr.state }}</p>
+            <p><strong>Email:</strong> {{ non_prospect_ind.contact_ptr.email }}</p>
+            <p><strong>Phone:</strong> {{ non_prospect_ind.contact_ptr.phone }}</p>
+            <p><strong>Preferred Contact Method:</strong> {{ non_prospect_ind.contact_ptr.preferred_contact_method }}</p>            
+            <p><strong>Marital Status:</strong> {{ non_prospect_ind.get_marital_status_display }}</p>            
+            <p><strong>Notes:</strong> {{ non_prospect_ind.contact_ptr.notes }}</p>
+
+            <div class="contact-actions">
+                <a href="{% url 'contacts:non_prospect_ind_detail' non_prospect_ind.contact_ptr.id }" class="btn">Edit Prospect</a>
+                <a href="#" class="btn">Log Interaction</a>
+                <a href="#" class="btn">Create Task</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="interaction-history">
+        <h3>Recent Interactions</h3>
+        {% comment %} {% for interaction in recent_interactions %}
+            <div class="interaction-item">
+                <span class="interaction-date">{{ interaction.date|date:"Y-m-d" }}</span> - 
+                <span class="interaction-type">{{ interaction.get_interaction_type_display }}</span>
+                <p class="interaction-description">{{ interaction.summary }}</p>
+            </div>
+        {% empty %}
+            <p>No recent interactions recorded.</p>
+        {% endfor %} THIS NEEDS TO BE IMPLEMENTED{% endcomment %}
+    </div>
+</div>
+{% endblock %}
