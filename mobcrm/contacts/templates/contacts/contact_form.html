@@ -3,39 +3,76 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+<style>
+    .d-none {
+        display: none !important;
+    }
+</style>
 <div class="container">
     <h2>{% if form.instance.pk %}Edit{% else %}Add New{% endif %} Contact</h2>
-    
     <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}       
-        <div class="form-group">
-            <label for="id_type">Contact Type</label>
-            {{ form.type|as_crispy_field }}
-        </div>
+        {% csrf_token %}
+        {{ contact_form|crispy }}
         
-        </div id= "general_fields">
-            {{ form|crispy }}
-        </div>
-        
-        <div id="church_fields" style="display: none;">
+        <div id="church_fields" class="d-none">
             {{ church_form|crispy }}
         </div>
-
-        <div id="prospect_fields" style="display: none;">
+        <div id="prospect_fields" class="d-none">
             {{ prospect_form|crispy }}
         </div>
-
-        <div id="non_prospect_fields" style="display: none;">
+        <div id="non_prospect_fields" class="d-none">
             {{ non_prospect_form|crispy }}
         </div>
-        
-        <button type="submit" class="btn btn-primary">
-            {% if form.instance.pk %}Update{% else %}Create{% endif %} Contact
-        </button>
+        <button type="submit" class="btn btn-primary">{% if form.instance.pk %}Update{% else %}Create{% endif %} Contact</button>
     </form>
 </div>
 {% endblock %}
 
 {% block extra_js %}
-    <script src="{% static 'js/contact_form.js' %}"></script>
+<script>
+console.log("JavaScript is running");
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM is loaded");
+    var typeField = document.getElementById('id_type');
+    console.log("Type field:", typeField);
+
+    var churchFields = document.getElementById('church_fields');
+    var prospectFields = document.getElementById('prospect_fields');
+    var nonProspectFields = document.getElementById('non_prospect_fields');
+
+    console.log("Church fields:", churchFields);
+    console.log("Prospect fields:", prospectFields);
+    console.log("Non-prospect fields:", nonProspectFields);
+
+    function toggleFields() {
+        var selectedType = typeField.value;
+        console.log("Selected type:", selectedType);
+
+        // Hide all fields
+        churchFields.classList.add('d-none');
+        prospectFields.classList.add('d-none');
+        nonProspectFields.classList.add('d-none');
+
+        // Show selected fields
+        if (selectedType === 'church') {
+            churchFields.classList.remove('d-none');
+            console.log("Showing church fields");
+        } else if (selectedType === 'prospect') {
+            prospectFields.classList.remove('d-none');
+            console.log("Showing prospect fields");
+        } else if (selectedType === 'non_prospect_individual') {
+            nonProspectFields.classList.remove('d-none');
+            console.log("Showing non-prospect fields");
+        }
+
+        console.log("Church fields class:", churchFields.className);
+        console.log("Prospect fields class:", prospectFields.className);
+        console.log("Non-prospect fields class:", nonProspectFields.className);
+    }
+
+    typeField.addEventListener('change', toggleFields);
+    toggleFields();  // Call once to set initial state
+});
+</script>
 {% endblock %}

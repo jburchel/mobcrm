@@ -14,7 +14,7 @@
         <button class="btn btn-success btn-rounded">Search</button>
     </div>
     
-    <a href="{% url 'contacts:prospect_create' %}" class="btn btn-primary mb-3">Add New Prospect</a>
+    <a href="{% url 'contacts:contact_create' %}" class="btn btn-primary mb-3">Add New Prospect</a>
 
     {% if prospects %}
         <table class="table table-striped">
@@ -29,7 +29,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for church in churches %}
+                {% for prospect in prospects %}
                     <tr>
                         <td>{{ prospect.first_name }} {{ prospect.last_name }}</td>
                         <td>{{ prospect.city }}, {{ prospect.state }}</td>
@@ -38,8 +38,8 @@
                         <td>{{ prospect.individual_pipeline }}</td>
                         <td>
                             <a href="{% url 'contacts:prospect_detail' prospect.pk %}" class="btn btn-sm btn-info">View</a>
-                            <a href="{% url 'contacts:prospect_update' prospect.pk %}" class="btn btn-sm btn-warning">Edit</a>
-                            <a href="{% url 'contacts:prospect_delete' prospect.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                            <a href="{% url 'contacts:contact_update' prospect.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="{% url 'contacts:contact_delete' prospect.pk %}" class="btn btn-sm btn-danger">Delete</a>
                         </td>
                     </tr>
                 {% endfor %}

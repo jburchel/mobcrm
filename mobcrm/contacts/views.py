@@ -1,72 +1,106 @@
 from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.views.decorators.http import require_POST    
+from django.views.decorators.http import require_POST   
+from django.db import transaction 
 from .models import Contact, Church, Prospect, NonProspectInd 
 from .forms import ContactForm, ChurchForm, ProspectForm, NonProspectIndForm
 
+# CONTACT VIEWS
+
 @login_required
 def contact_list(request):
-    contacts = Contact.objects.all()  # Make sure this is a queryset, not a function
-    paginator = Paginator(contacts, 10)  # Show 10 contacts per page
+    contacts = Contact.objects.all()
+    churches = Church.objects.all()
+    prospects = Prospect.objects.all()
+    non_prospects = NonProspectInd.objects.all()
+
+    all_contacts = list(contacts) + list(churches) + list(prospects) + list(non_prospects)
+    
+    print(f"Number of contacts: {len(all_contacts)}")
+    print(f"Contacts: {len(contacts)}, Churches: {len(churches)}, Prospects: {len(prospects)}, Non-Prospects: {len(non_prospects)}")
+
+    paginator = Paginator(all_contacts, 10)  # Show 10 contacts per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    context = {'contacts': page_obj}
+    context = {
+        'contacts': page_obj,
+        'page_obj': page_obj,
+    }
     return render(request, 'contacts/contact_list.html', context)
 
 @login_required
 def contact_detail(request, pk):
     contact = get_object_or_404(Contact, pk=pk)
     
+    print(f"Contact type: {contact.type}")  # Debug print
+    
     contact_types = {
-        'CHURCH': (Church, 'churches/church_detail.html', 'church'),
-        'PROSPECT': (Prospect, 'prospects/prospect_detail.html', 'prospect'),
-        'NON_PROSPECT': (NonProspectInd, 'non_prospect_ind/non_prospect_detail.html', 'non_prospect'),
+        'church': (Church, 'churches/church_detail.html', 'church'),
+        'prospect': (Prospect, 'prospects/prospect_detail.html', 'prospect'),
+        'non_prospect_individual': (NonProspectInd, 'non_prospect_ind/non_prospect_detail.html', 'non_prospect'),
     }
     
-    if contact.contact_type in contact_types:
-        model, template, context_name = contact_types[contact.contact_type]
-        specific_contact = get_object_or_404(model, contact_ptr_id=contact.id)
-        return render(request, template, {context_name: specific_contact})
+    if contact.type.lower() in contact_types:
+        model, template, context_name = contact_types[contact.type.lower()]
+        try:
+            specific_contact = model.objects.get(contact_ptr_id=contact.id)
+            return render(request, template, {context_name: specific_contact})
+        except model.DoesNotExist:
+            print(f"Failed to find {model.__name__} with contact_ptr_id={contact.id}")  # Debug print
+            raise Http404(f"{model.__name__} not found")
     else:
+        print(f"Unknown contact type: {contact.type}")  # Debug print
         raise Http404("Unknown contact type")
 
 @login_required
 def contact_create(request):
     if request.method == 'POST':
-        form = ContactForm(request.POST, request.FILES)
-        church_form = ChurchForm(request.POST, request.FILES)
-        prospect_form = ProspectForm(request.POST, request.FILES)
-        non_prospect_form = NonProspectIndForm(request.POST, request.FILES)
+        contact_form = ContactForm(request.POST)
+        contact_type = request.POST.get('type')
         
-        if form.is_valid():
-            contact = form.save(commit=False)
-            if contact.type == 'CHURCH' and church_form.is_valid():
-                church = church_form.save(commit=False)
-                church.contact_ptr = contact
-                church.save()
-            elif contact.type == 'PROSPECT' and prospect_form.is_valid():
-                prospect = prospect_form.save(commit=False)
-                prospect.contact_ptr = contact
-                prospect.save()
-            elif contact.type == 'NON_PROSPECT' and non_prospect_form.is_valid():
-                non_prospect = non_prospect_form.save(commit=False)
-                non_prospect.contact_ptr = contact
-                non_prospect.save()
-            
+        if contact_form.is_valid():
+            contact = contact_form.save(commit=False)
+            contact.type = contact_type
             contact.save()
-            return redirect('contacts:contact_detail', pk=contact.pk)
+            
+            if contact_type == 'church':
+                church_form = ChurchForm(request.POST)
+                if church_form.is_valid():
+                    church = church_form.save(commit=False)
+                    church.contact_ptr = contact
+                    church.save()
+            elif contact_type == 'prospect':
+                prospect_form = ProspectForm(request.POST)
+                if prospect_form.is_valid():
+                    prospect = prospect_form.save(commit=False)
+                    prospect.contact_ptr = contact
+                    prospect.save()
+                    # Update the contact object to point to the prospect
+                    contact.prospect = prospect
+                    contact.save()
+            elif contact_type == 'non_prospect_individual':
+                non_prospect_form = NonProspectIndForm(request.POST)
+                if non_prospect_form.is_valid():
+                    non_prospect = non_prospect_form.save(commit=False)
+                    non_prospect.contact_ptr = contact
+                    non_prospect.save()
+            
+            print(f"Created contact of type: {contact.type}")  # Debug print
+            return redirect('contacts:contact_list')
+        else:
+            print(f"Contact form errors: {contact_form.errors}")  # Debug print
     else:
-        form = ContactForm()
+        contact_form = ContactForm()
         church_form = ChurchForm()
         prospect_form = ProspectForm()
         non_prospect_form = NonProspectIndForm()
     
     return render(request, 'contacts/contact_form.html', {
-        'form': form,
+        'contact_form': contact_form,
         'church_form': church_form,
         'prospect_form': prospect_form,
         'non_prospect_form': non_prospect_form,
@@ -75,48 +109,53 @@ def contact_create(request):
 @login_required
 def contact_update(request, pk):
     contact = get_object_or_404(Contact, pk=pk)
+    
     if request.method == 'POST':
-        form = ContactForm(request.POST, request.FILES, instance=contact)
-        church_form = ChurchForm(request.POST, instance=getattr(contact, 'church', None))
-        prospect_form = ProspectForm(request.POST, instance=getattr(contact, 'prospect', None))
-        non_prospect_form = NonProspectIndForm(request.POST, instance=getattr(contact, 'nonprospectind', None))
+        contact_form = ContactForm(request.POST, request.FILES, instance=contact)
         
-        if form.is_valid():
-            contact = form.save(commit=False)
-            if contact.type == 'CHURCH' and church_form.is_valid():
-                church = church_form.save(commit=False)
-                church.contact_ptr = contact
-                church.save()
-            elif contact.type == 'PROSPECT' and prospect_form.is_valid():
-                prospect = prospect_form.save(commit=False)
-                prospect.contact_ptr = contact
-                prospect.save()
-            elif contact.type == 'NON_PROSPECT' and non_prospect_form.is_valid():
-                non_prospect = non_prospect_form.save(commit=False)
-                non_prospect.contact_ptr = contact
-                non_prospect.save()
-            
-            contact.save()
+        if contact.type == 'church':
+            specific_form = ChurchForm(request.POST, request.FILES, instance=contact.church)
+        elif contact.type == 'prospect':
+            specific_form = ProspectForm(request.POST, request.FILES, instance=contact.prospect)
+        elif contact.type == 'non_prospect_individual':
+            specific_form = NonProspectIndForm(request.POST, request.FILES, instance=contact.nonprospectind)
+        else:
+            specific_form = None
+
+        if contact_form.is_valid() and (specific_form is None or specific_form.is_valid()):
+            contact = contact_form.save()
+            if specific_form:
+                specific_form.save()
             return redirect('contacts:contact_detail', pk=contact.pk)
     else:
-        form = ContactForm(instance=contact)
-        church_form = ChurchForm(instance=getattr(contact, 'church', None))
-        prospect_form = ProspectForm(instance=getattr(contact, 'prospect', None))
-        non_prospect_form = NonProspectIndForm(instance=getattr(contact, 'nonprospectind', None))
+        contact_form = ContactForm(instance=contact)
         
+        if contact.type == 'church':
+            specific_form = ChurchForm(instance=contact.church)
+        elif contact.type == 'prospect':
+            specific_form = ProspectForm(instance=contact.prospect)
+        elif contact.type == 'non_prospect_individual':
+            specific_form = NonProspectIndForm(instance=contact.nonprospectind)
+        else:
+            specific_form = None
+    
     return render(request, 'contacts/contact_form.html', {
-        'form': form,
-        'church_form': church_form,
-        'prospect_form': prospect_form,
-        'non_prospect_form': non_prospect_form,
+        'contact_form': contact_form,
+        'specific_form': specific_form,
+        'contact': contact
     })
 
 @login_required
-@require_POST
 def contact_delete(request, pk):
     contact = get_object_or_404(Contact, pk=pk)
-    contact.delete()
-    return redirect('contacts:contact_list')
+    if request.method == 'POST':
+        contact_type = contact.get_type_display()
+        contact.delete()
+        messages.success(request, f'{contact_type} has been deleted successfully.')
+        return redirect('contacts:contact_list')
+    return render(request, 'contacts/contact_confirm_delete.html', {'contact': contact})
+
+# CHURCH VIEWS
 
 def church_list(request):
     churches = Church.objects.all()
@@ -130,27 +169,7 @@ def church_detail(request, pk):
     church = get_object_or_404(Church, pk=pk)
     return render(request, 'churches/church_detail.html', {'churches': church})
 
-@login_required
-def church_create(request):
-    if request.method == 'POST':
-        form = ChurchForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('contacts:church_list')
-    else:
-        church_form = ChurchForm()
-    return render(request, 'contacts/contact_form.html', {            
-        'church_form': church_form,
-    })
-
-@login_required
-def church_delete(request, pk):
-    church = get_object_or_404(Church, pk=pk)
-    if request.method == 'POST':
-        church.delete()
-        messages.success(request, 'Church deleted successfully.')
-        return redirect('contacts:church_list')
-    return render(request, 'churches/church_confirm_delete.html', {'church': church})
+# PROSPECT VIEWS
 
 def prospect_list(request):
     prospects = Prospect.objects.all()
@@ -164,25 +183,7 @@ def prospect_detail(request, pk):
     prospect = get_object_or_404(Prospect, pk=pk)
     return render(request, 'prospects/prospect_detail.html', {'prospect': prospect})
 
-@login_required
-def prospect_create(request):
-    if request.method == 'POST':
-        form = ProspectForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('contacts:prospect_list')
-    else:
-        form = ProspectForm()
-    return render(request, 'prospects/prospect_form.html', {'form': form})
-
-@login_required
-def prospect_delete(request, pk):
-    prospect = get_object_or_404(Church, pk=pk)
-    if request.method == 'POST':
-        prospect.delete()
-        messages.success(request, 'Prospct deleted successfully.')
-        return redirect('contacts:prospect_list')
-    return render(request, 'prospcects/prospect_confirm_delete.html', {'prospect': prospect})
+# NON-PROSPECT INDIVIDUAL VIEWS
 
 def non_prospect_list(request):
     non_prospects = NonProspectInd.objects.all()
@@ -195,23 +196,3 @@ def non_prospect_list(request):
 def non_prospect_detail(request, pk):
     non_prospect = get_object_or_404(NonProspectInd, pk=pk)
     return render(request, 'non_prospect_ind/non_prospect_detail.html', {'non_prospect': non_prospect})
-
-@login_required
-def non_prospect_create(request):
-    if request.method == 'POST':
-        form = NonProspectIndForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('contacts:non_prospect_list')
-    else:
-        form = NonProspectIndForm()
-    return render(request, 'non_prospect_ind/non_prospect_form.html', {'form': form})
-
-@login_required
-def non_prospect_delete(request, pk):
-    non_prospect = get_object_or_404(Church, pk=pk)
-    if request.method == 'POST':
-        non_prospect.delete()
-        messages.success(request, 'Contact deleted successfully.')
-        return redirect('contacts:non_prospect_list')
-    return render(request, 'non_prospect_ind/non_prospect_confirm_delete.html', {'non_prospect': non_prospect})

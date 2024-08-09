@@ -84,22 +84,22 @@
         </div>
     </div>
         
-        {% comment %} <div class="upcoming-tasks">
+        <div class="upcoming-tasks">
             <h2>Upcoming Tasks</h2>
-            {% for task in upcoming_tasks %}
+            {% comment %} {% for task in upcoming_tasks %}
                 <div class="detail-item">
                     <span class="detail-label">{{ task.due_date|date:"F d, Y" }}:</span> 
                     {{ task.description }}
                 </div>
-            {% endfor %}
-        </div> {% endcomment %}
+            {% endfor %} {% endcomment %}
+        </div>
     </div>
     <div class="action-buttons">
         <a href="{% url 'contacts:church_update' church.contact_ptr_id %}" class="btn btn-primary">Edit Church</a>
         <a href="{#" class="btn btn-secondary">Log New Interaction</a>
         <a href="#" class="btn btn-secondary">Schedule Task</a>
         <a href="#" class="btn btn-secondary">View Communication History</a>
-        <a href="{% url 'contacts:church_delete' church.contact_ptr_id %}">Delete</a>
+        <a href="{% url 'contacts:contact_delete' church.contact_ptr_id %}">Delete</a>
     </div>
 </div>
 {% endblock %}

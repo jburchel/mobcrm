@@ -1,7 +1,7 @@
 from django.db import models
 
 class Contact(models.Model):
-    CONTACT_TYPES = (
+    TYPE_CHOICES = (
         ('non_prospect_individual', 'Non-Prospect Individual'),
         ('church', 'Church'),
         ('prospect', 'Prospect'),
@@ -26,7 +26,7 @@ class Contact(models.Model):
     preferred_contact_method = models.CharField(max_length=100, choices=PREFERRED_CONTACT_METHODS)
     phone = models.CharField(max_length=20)
     email = models.EmailField()
-    type = models.CharField(max_length=100, choices=CONTACT_TYPES)  
+    type = models.CharField(max_length=100, choices=TYPE_CHOICES)  
     church = models.CharField(max_length=100, null=True, blank=True)  
     street_address = models.CharField(max_length=200, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
@@ -68,13 +68,6 @@ class Prospect(Contact):
         ('COLD CALL', 'COLD CALL'),('PERSPECTIVES', 'PERSPECTIVES'),('REFERAL', 'REFERAL'),('OTHER', 'OTHER'), ('UNKNOWN', 'UNKNOWN')
     )
     
-    contact_ptr = models.OneToOneField(
-        Contact, on_delete=models.CASCADE,
-        parent_link=True,
-        related_name='prospect_contact'
-    )
-    
-    contact = models.ForeignKey(Contact, related_name='contacts', on_delete=models.CASCADE)
     virtuous = models.BooleanField(default=False)
     home_country = models.CharField(max_length=100, null=True, blank=True)
     spouse_recruit = models.BooleanField(default=False)
@@ -88,12 +81,10 @@ class Prospect(Contact):
     info_given = models.TextField(null=True, blank=True)
     desired_service = models.TextField(null=True, blank=True)
     reason_closed = models.TextField(null=True, blank=True)
-    # contact = models.ForeignKey(Contact, on_delete=models.CASCADE)
     date_closed = models.DateField(null=True, blank=True)
     
-    
     def __str__(self):
-        return str(self.contact.last_name)
+        return f"{self.first_name} {self.last_name}"
     
     class Meta:
         verbose_name = 'Prospect'
