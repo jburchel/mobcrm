@@ -14,7 +14,7 @@
         <button class="btn btn-success btn-rounded">Search</button>
     </div>
     
-    <a href="{% url 'contacts:contact_create' %}" class="btn btn-primary mb-3">Add New Church</a>
+    <a href="{% url 'contacts:contact_create' %}" class="btn btn-success btn-primary mb-3">Add New Church</a>
 
     {% if churches %}
         <table class="table table-striped">
@@ -35,9 +35,9 @@
                         <td>{{ church.senior_pastor }}</td>
                         <td>{{ church.congregation_size }}</td>
                         <td>
-                            <a href="{% url 'contacts:church_detail' contact.pk %}" class="btn btn-sm btn-info">View</a>
-                            <a href="{% url 'contacts:contact_update' contact.pk %}" class="btn btn-sm btn-warning">Edit</a>
-                            <a href="{% url 'contacts:contact_delete' contact.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                            <a href="{% url 'contacts:church_detail' pk=church.pk %}" class="btn btn-sm btn-info">View</a>
+                            <a href="{% url 'contacts:contact_update' pk=contact.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="{% url 'contacts:contact_delete' pk=contact.pk %}" class="btn btn-sm btn-danger">Delete</a>
                         </td>
                     </tr>
                 {% endfor %}

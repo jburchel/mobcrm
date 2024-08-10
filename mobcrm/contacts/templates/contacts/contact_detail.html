@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+{% load static%}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/contact_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<<div class="container">
+    <div class="contact-header">
+        <img src="{{ contact.image_url }}" alt="{{ contact.first_name }} {{ contact.last_name }}" class="contact-image">
+        <div class="contact-title">
+            <h1 class="contact-name">{{ contact.name }}</h1>
+            <div class="contact-type">{{ contact.get_type_display }}</div>
+            <div class="action-buttons">
+                <a href="{% url 'contacts:contact_update' contact.pk %}" class="btn btn-edit">Edit Contact</a>
+                <a href="{% url 'contacts:contact_delete' contact.pk %}" class="btn btn-delete">Delete Contact</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="contact-details">
+        <!-- Contact details sections here -->
+    </div>
+    
+    <div class="bottom-sections">
+        <div class="engagement-history">
+            <!-- Engagement history here -->
+        </div>
+        <div class="upcoming-tasks">
+            <!-- Upcoming tasks here -->
+        </div>
+    </div>
+</div>
+{% endblock %}

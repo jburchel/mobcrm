@@ -31,7 +31,7 @@
         <div class="detail-section">
             <h2>Church Details</h2>
             <div class="detail-item"><span class="detail-label">Congregation Size:</span> {{ church.congregation_size }}</div>
-            <div class="detail-item"><span class="detail-label">Year Founded:</span> {{ church.year_founded }}</div>
+            <div class="detail-item"><span class="detail-label">Year Founded:</span> {{ church.year_founded|date:'%Y' }}</div>
             <div class="detail-item"><span class="detail-label">Senior Pastor:</span> {{ church.senior_pastor_first_name }}  {{church.senior_pastor_last_name }}</div>
             <div class="detail-item"><span class="detail-label">Missions Pastor:</span> {{ church.missions_pastor_first_name }}  {{church.missions_pastor_last_name }}</div>
 
@@ -95,11 +95,11 @@
         </div>
     </div>
     <div class="action-buttons">
-        <a href="{% url 'contacts:church_update' church.contact_ptr_id %}" class="btn btn-primary">Edit Church</a>
+        <a href="{% url 'contacts:contact_update' pk=contact.pk %}" class="btn btn-primary">Edit Church</a>
         <a href="{#" class="btn btn-secondary">Log New Interaction</a>
         <a href="#" class="btn btn-secondary">Schedule Task</a>
         <a href="#" class="btn btn-secondary">View Communication History</a>
-        <a href="{% url 'contacts:contact_delete' church.contact_ptr_id %}">Delete</a>
+        <a href="{% url 'contacts:contact_delete' pk=contact.pk %}">Delete</a>
     </div>
 </div>
 {% endblock %}

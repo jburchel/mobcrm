@@ -3,26 +3,25 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<style>
-    .d-none {
-        display: none !important;
-    }
-</style>
+
 <div class="container">
     <h2>{% if form.instance.pk %}Edit{% else %}Add New{% endif %} Contact</h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ contact_form|crispy }}
+        {{ form|crispy }}
         
-        <div id="church_fields" class="d-none">
+        <div id="church_fields" style="display: none;">
             {{ church_form|crispy }}
         </div>
-        <div id="prospect_fields" class="d-none">
+        
+        <div id="prospect_fields" style="display: none;">
             {{ prospect_form|crispy }}
         </div>
-        <div id="non_prospect_fields" class="d-none">
+        
+        <div id="non_prospect_fields" style="display: none;">
             {{ non_prospect_form|crispy }}
         </div>
+       
         <button type="submit" class="btn btn-primary">{% if form.instance.pk %}Update{% else %}Create{% endif %} Contact</button>
     </form>
 </div>
@@ -50,25 +49,9 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("Selected type:", selectedType);
 
         // Hide all fields
-        churchFields.classList.add('d-none');
-        prospectFields.classList.add('d-none');
-        nonProspectFields.classList.add('d-none');
-
-        // Show selected fields
-        if (selectedType === 'church') {
-            churchFields.classList.remove('d-none');
-            console.log("Showing church fields");
-        } else if (selectedType === 'prospect') {
-            prospectFields.classList.remove('d-none');
-            console.log("Showing prospect fields");
-        } else if (selectedType === 'non_prospect_individual') {
-            nonProspectFields.classList.remove('d-none');
-            console.log("Showing non-prospect fields");
-        }
-
-        console.log("Church fields class:", churchFields.className);
-        console.log("Prospect fields class:", prospectFields.className);
-        console.log("Non-prospect fields class:", nonProspectFields.className);
+        churchFields.style.display = selectedType === 'church' ? 'block' : 'none';
+        prospectFields.style.display = selectedType === 'prospect' ? 'block' : 'none';
+        nonProspectFields.style.display = selectedType === 'non_prospect_individual' ? 'block' : 'none';
     }
 
     typeField.addEventListener('change', toggleFields);

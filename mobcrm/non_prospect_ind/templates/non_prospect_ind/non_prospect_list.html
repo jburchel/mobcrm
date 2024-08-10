@@ -25,9 +25,9 @@
                         <td>{{ non_prospect.phone }}</td>
                         <td>{{ non_prospect.assigned_to }}</td>
                         <td>
-                            <a href="{% url 'contacts:non_prospect_ind_detail' non_prospect.id %}" class="btn btn-sm btn-info">View</a>
-                            <a href="{% url 'contacts:non_prospect_ind_update' non_prospect.id %}" class="btn btn-sm btn-warning">Edit</a>
-                            <a href="{% url 'contacts:non_prospect_ind_delete' non_prospect.id %}" class="btn btn-sm btn-danger">Delete</a>
+                            <a href="{% url 'contacts:non_prospect_ind_detail' pk = contact.pk %}" class="btn btn-sm btn-info">View</a>
+                            <a href="{% url 'contacts:non_prospect_ind_update' pk = contact.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="{% url 'contacts:non_prospect_ind_delete' pk = contact.pk %}" class="btn btn-sm btn-danger">Delete</a>
                         </td>
                     </tr>
                 {% endfor %}

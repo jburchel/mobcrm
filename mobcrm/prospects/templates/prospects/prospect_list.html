@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/church_list.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/contacts.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -14,7 +14,7 @@
         <button class="btn btn-success btn-rounded">Search</button>
     </div>
     
-    <a href="{% url 'contacts:contact_create' %}" class="btn btn-primary mb-3">Add New Prospect</a>
+    <a href="{% url 'contacts:contact_create' %}" class="btn btn-success btn-primary mb-3">Add New Prospect</a>
 
     {% if prospects %}
         <table class="table table-striped">
@@ -37,9 +37,9 @@
                         <td>{{ prospect.email }}</td>
                         <td>{{ prospect.individual_pipeline }}</td>
                         <td>
-                            <a href="{% url 'contacts:prospect_detail' prospect.pk %}" class="btn btn-sm btn-info">View</a>
-                            <a href="{% url 'contacts:contact_update' prospect.pk %}" class="btn btn-sm btn-warning">Edit</a>
-                            <a href="{% url 'contacts:contact_delete' prospect.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                            <a href="{% url 'contacts:prospect_detail' contact=prospect.pk %}" class="btn btn-sm btn-info">View</a>
+                            <a href="{% url 'contacts:contact_update' contact=contact.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="{% url 'contacts:contact_delete' contact=contact.pk %}" class="btn btn-sm btn-danger">Delete</a>
                         </td>
                     </tr>
                 {% endfor %}

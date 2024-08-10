@@ -28,9 +28,10 @@
             <p><strong>Notes:</strong> {{ non_prospect_ind.contact_ptr.notes }}</p>
 
             <div class="contact-actions">
-                <a href="{% url 'contacts:non_prospect_ind_detail' non_prospect_ind.contact_ptr.id }" class="btn">Edit Prospect</a>
+                <a href="{% url 'contacts:contact_detail' pk=contact.pk %}" class="btn">Edit Prospect</a>
                 <a href="#" class="btn">Log Interaction</a>
                 <a href="#" class="btn">Create Task</a>
+                <a href="{% url 'contacts:contact_delete' pk=contact.pk %}" class="btn">Delete Prospect</a>
             </div>
         </div>
     </div>

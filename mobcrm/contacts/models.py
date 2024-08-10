@@ -26,7 +26,7 @@ class Contact(models.Model):
     preferred_contact_method = models.CharField(max_length=100, choices=PREFERRED_CONTACT_METHODS)
     phone = models.CharField(max_length=20)
     email = models.EmailField()
-    type = models.CharField(max_length=100, choices=TYPE_CHOICES)  
+    type = models.CharField(max_length=30, choices=TYPE_CHOICES, default='prospect')  
     church = models.CharField(max_length=100, null=True, blank=True)  
     street_address = models.CharField(max_length=200, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
@@ -36,8 +36,25 @@ class Contact(models.Model):
     date_created = models.DateField(null=True, blank=True)
     date_last_updated = models.DateField(null=True, blank=True)
 
+    
+    def image_url(self):
+        if self.image and hasattr(self.image, 'url'):
+            return self.image.url
+        else:
+            return "/static/images/default_profile.jpg" 
+        
+    def save(self, *args, **kwargs):
+        if not self.pk:  # Only set the type if it's a new object
+            if isinstance(self, Church):
+                self.type = 'church'
+            elif isinstance(self, Prospect):
+                self.type = 'prospect'
+            elif isinstance(self, NonProspectInd):
+                self.type = 'non_prospect_individual'
+        super().save(*args, **kwargs)
+    
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.first_name} {self.last_name}" if self.first_name or self.last_name else f"Contact {self.id}"
 
 class Prospect(Contact):
     MARITAL_STATUS = (
@@ -84,8 +101,8 @@ class Prospect(Contact):
     date_closed = models.DateField(null=True, blank=True)
     
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
-    
+        return super().__str__()
+        
     class Meta:
         verbose_name = 'Prospect'
         verbose_name_plural = 'Prospects'
@@ -140,14 +157,16 @@ class Church(Contact):
     source = models.CharField(max_length=100, choices=SOURCE, default='UNKNOWN')
     referred_by = models.CharField(max_length=100, null=True, blank=True)    
     info_given = models.TextField(null=True, blank=True)
-    reason_closed = models.TextField(null=True, blank=True)    
+    reason_closed = models.TextField(null=True, blank=True)  
+    year_founded = models.IntegerField(null=True, blank=True)
     date_closed = models.DateField(null=True, blank=True)
     
     
     def __str__(self):
-        return self.church_name
+        return super().__str__()
     
     class Meta:
+        verbose_name = "Church"
         verbose_name_plural = "Churches"
 
 class NonProspectInd(Contact):
@@ -165,7 +184,7 @@ class NonProspectInd(Contact):
     assigned_to = models.CharField(max_length=30, choices=ASSIGNED_TO_CHOICES, default='UNASSIGNED')
     
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return super().__str__()
     
     class Meta:
         verbose_name = "Non-Prospect Individual"

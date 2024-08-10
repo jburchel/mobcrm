@@ -1,35 +1,54 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/contact_detail.css' %}">
+{% endblock %}
+
 {% block content %}
+{% with contact=prospect.get_contact %}
 <div class="container">
-    <div class="contact-details">
-        <div>
-            {% if prospect.image %}
-                <img src="{{ prospect.image.url }}" alt="Profile picture of {{ prospect.first_name }} {{ prospect.last_name }}" class="contact-image" width="300" height="300">
-            {% else %}
-                <img src="{% static 'images/default_profile.jpg' %}" alt="Default profile picture" class="contact-image" width="300" height="300">
-            {% endif %}
+    <div class="container">
+        <h1>Prospect Detail</h1>
+    
+        <h2>Prospect Attributes:</h2>
+        <pre>
+        {% for field, value in prospect_fields %}
+            {{ field }}: {% if value == "" %}(empty string){% elif value == None %}(None){% else %}{{ value }}{% endif %}
+        {% endfor %}
+        </pre>
+        
+        <h2>Contact Attributes:</h2>
+        <pre>
+        {% for field, value in contact_fields %}
+            {{ field }}: {% if value == "" %}(empty string){% elif value == None %}(None){% else %}{{ value }}{% endif %}
+        {% endfor %}
+        </pre>
         </div>
 
         <div class="contact-info">
-            <h2>{{ prospect.first_name }} {{ prospect.last_name }}</h2>
+            <h2> {% if prospect.first_name == "" %}(empty string){% elif prospect.first_name == None %}(None){% else %}{{ prospect.first_name }}{% endif %} 
+                {% if prospect.last_name == "" %}(empty string){% elif prospect.last_name == None %}(None){% else %}{{ prospect.last_name }}{% endif %}
+            </h2>
 
-            <p><strong>Location:</strong> {{ prospect.city }}, {{ prospect.state }}</p>
-            <p><strong>Email:</strong> <a href="mailto:{{ prospect.email }}">{{ prospect.email }}</a></p>
-            <p><strong>Phone:</strong> {{ prospect.phone }}</p>
-            <p><strong>Preferred Contact Method:</strong> {{ prospect.preferred_contact_method }}</p>
+            <p><strong>Location:</strong> {% if prospect.city == "" %}(empty string){% elif prospect.city == None %}(None){% else %}{{ prospect.city }}{% endif %}, 
+                {% if prospect.state == "" %}(empty string){% elif prospect.state == None %}(None){% else %}{{ prospect.state }}{% endif %}
+            </p>
+            <p><strong>Email:</strong> <a href="mailto:{{ contact.email }}">{% if prospect.email == "" %}(empty string){% elif prospect.email == None %}(None){% else %}{{ prospect.email }}{% endif %}</a></p>
+            <p><strong>Phone:</strong> {% if prospect.phone == "" %}(empty string){% elif prospect.phone == None %}(None){% else %}{{ prospect.phone }}{% endif %}</p>
+            <p><strong>Preferred Contact Method:</strong> {% if prospect.preferred_contact_method == "" %}(empty string){% elif prospect.preferred_contact_method == None %}(None){% else %}{{ prospect.get_preferred_contact_method_display }}{% endif %}</p>
             <p><strong>Spouse Recruit:</strong> {% if prospect.spouse_recruit %}Yes{% else %}No{% endif %}</p>
             <p><strong>Marital Status:</strong> {{ prospect.get_marital_status_display }}</p>
             <p><strong>Pipeline Stage:</strong> {{ prospect.get_individual_pipeline_display }}</p>
             <p><strong>Priority:</strong> {{ prospect.get_priority_display }}</p>
-            <p><strong>Assigned To:</strong> {{ prospect.assigned_to }}</p>
-            <p><strong>Notes:</strong> {{ prospect.notes }}</p>
+            <p><strong>Assigned To:</strong> {{ contact.assigned_to }}</p>
+            <p><strong>Notes:</strong> {{ contact.notes }}</p>
 
             <div class="contact-actions">
-                <a href="{% url 'contacts:prospect_update' pk=prospect.pk %}" class="btn btn-primary">Edit Prospect</a>
-                <a href="#" class="btn btn-secondary">Log Interaction</a>
-                <a href="#" class="btn btn-info">Create Task</a>
+                <a href="{% url 'contacts:contact_update' pk=contact.pk %}" class="btn btn-success">Edit Prospect</a>
+                <a href="{% url 'contacts:contact_delete' pk=contact.pk %}" class="btn btn-success">Delete Prospect</a>
+                <a href="#" class="btn btn-success btn-secondary">Log Interaction</a>
+                <a href="#" class="btn btn-success">Create Task</a>
             </div>
         </div>
     </div>
@@ -46,4 +65,5 @@
         {% endfor %} {% endcomment %}
     </div>
 </div>
+{% endwith %}
 {% endblock %}

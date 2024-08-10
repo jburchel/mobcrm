@@ -25,11 +25,9 @@ class ChurchForm(forms.ModelForm):
     class Meta:
         model = Church
         fields = [           
-            'church_name','website', 'denomination', 'congregation_size', 'senior_pastor_first_name','senior_pastor_last_name',
-            'missions_pastor_first_name', 'missions_pastor_last_name',
-            'color','church_pipeline', 'priority',
-            'assigned_to', 'source', 'referred_by', 'virtuous', 'date_closed',
-            'info_given', 'reason_closed', 'primary_contact_first_name', 'primary_contact_last_name'
+            'church_name','virtuous', 'primary_contact_first_name', 'primary_contact_last_name','senior_pastor_first_name','senior_pastor_last_name',
+            'denomination', 'congregation_size', 'year_founded','missions_pastor_first_name', 'missions_pastor_last_name',
+            'website','color','church_pipeline', 'priority','assigned_to', 'source', 'referred_by','info_given', 'reason_closed','date_closed' 
         ]
         
     def __init__(self, *args, **kwargs):
@@ -47,7 +45,6 @@ class ProspectForm(forms.ModelForm):
             'assigned_to', 'source', 'referred_by', 'date_closed',
             'info_given', 'desired_service', 'reason_closed'
         ]
-        exclude = ['contact_ptr']
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
